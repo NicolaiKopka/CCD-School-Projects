@@ -96,5 +96,78 @@ class GameTest {
         int actualScore = game.totalScore();
         assertEquals(expectedScore, actualScore);
     }
+    @Test
+    void shouldReturnCorrectScoreAfterResolvingStrikesAndSpares() {
+        var game = new Game();
+        game.addRoll(2);
+        game.addRoll(7);
+        game.addRoll(10);
+        game.addRoll(10);
+        game.addRoll(8);
+        game.addRoll(2);
+        game.addRoll(5);
+        game.addRoll(3);
+        String expected = "([2,7],9), ([10],20), ([10],20), ([8,2],15), ([5,3],8)";
+        String actual = game.toString();
+        assertEquals(expected, actual);
+        int expectedScore = 72;
+        int actualScore = game.totalScore();
+        assertEquals(expectedScore, actualScore);
+    }
+
+    @Test
+    void shouldReturnCorrectScoreOfFullGame() {
+        var game = new Game();
+        game.addRoll(1);
+        game.addRoll(4);
+        game.addRoll(4);
+        game.addRoll(5);
+        game.addRoll(6);
+        game.addRoll(4);
+        game.addRoll(5);
+        game.addRoll(5);
+        game.addRoll(10);
+        game.addRoll(0);
+        game.addRoll(1);
+        game.addRoll(7);
+        game.addRoll(3);
+        game.addRoll(6);
+        game.addRoll(4);
+        game.addRoll(10);
+        game.addRoll(2);
+        game.addRoll(8);
+        game.addRoll(6);
+        int expectedScore = 133;
+        int actualScore = game.totalScore();
+        assertEquals(expectedScore, actualScore);
+    }
+
+    @Test
+    void shouldThrowExceptionIfTooManyThrows() {
+        var game = new Game();
+        game.addRoll(1);
+        game.addRoll(4);
+        game.addRoll(4);
+        game.addRoll(5);
+        game.addRoll(6);
+        game.addRoll(4);
+        game.addRoll(5);
+        game.addRoll(5);
+        game.addRoll(10);
+        game.addRoll(0);
+        game.addRoll(1);
+        game.addRoll(7);
+        game.addRoll(3);
+        game.addRoll(6);
+        game.addRoll(4);
+        game.addRoll(10);
+        game.addRoll(2);
+        game.addRoll(8);
+        game.addRoll(6);
+        try{
+            game.addRoll(6);
+            fail();
+        } catch (RuntimeException e){}
+    }
 
 }
