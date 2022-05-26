@@ -46,4 +46,12 @@ public class Frame {
     public int getScore() {
         return score;
     }
+
+    public int[] getPinsRolled() {
+        return pinsRolled;
+    }
+
+    public void setScore(int score) {
+        this.score += score;
+    }
 }
