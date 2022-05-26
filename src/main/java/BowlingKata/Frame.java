@@ -11,7 +11,13 @@ public class Frame {
         this.pinsRolled = new int[1];
     }
 
-    void setPinsRolled(int pins, int currentThrowNumber) {
+    void setPinsRolled(int pins, int currentThrowNumber, boolean eligibleThird) {
+        if (eligibleThird) {
+            pinsRolled = Arrays.copyOf(pinsRolled, 3);
+            pinsRolled[2] = pins;
+            calculateScore();
+            return;
+        }
         if(currentThrowNumber % 2 == 0){
             pinsRolled = Arrays.copyOf(pinsRolled, 2);
             pinsRolled[1] = pins;
