@@ -5,13 +5,21 @@ import java.util.Arrays;
 public class Game implements GameInterface{
 
     private Frame[] frames;
-    private int currentThrowCounter = 0;
-    private double currentFrameCounter = 0.0;
+    private int currentThrowCounter;
+    private double currentFrameCounter;
+    private int totalScore;
+
+    public Game() {
+        this.frames = new Frame[1];
+        this.currentThrowCounter = 0;
+        this.currentFrameCounter = 0.0;
+        this.totalScore = 0;
+    }
+
     @Override
     public void addRoll(int pins) {
         currentThrowCounter += 1;
         if(currentFrameCounter == 0.0) {
-            frames = new Frame[1];
             frames[0] = createFrame();
         }
         if(currentFrameCounter % 1 == 0 && currentFrameCounter != 0.0) {
@@ -24,12 +32,15 @@ public class Game implements GameInterface{
 
     @Override
     public Frame[] frames() {
-        return new Frame[0];
+        return frames;
     }
 
     @Override
     public int totalScore() {
-        return 0;
+        for(Frame frame : frames){
+            totalScore += frame.getScore();
+        }
+        return totalScore;
     }
 
     @Override
