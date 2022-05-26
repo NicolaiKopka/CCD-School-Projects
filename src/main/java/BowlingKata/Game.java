@@ -8,25 +8,35 @@ public class Game implements GameInterface{
     private int currentThrowCounter;
     private double currentFrameCounter;
     private int totalScore;
+    private boolean strikeToResolve;
 
     public Game() {
         this.frames = new Frame[1];
         this.currentThrowCounter = 0;
         this.currentFrameCounter = 0.0;
         this.totalScore = 0;
+        this.strikeToResolve = false;
     }
 
     @Override
     public void addRoll(int pins) {
         currentThrowCounter += 1;
-        if(currentFrameCounter == 0.0) {
-            frames[0] = createFrame();
+        createFrame();
+        if(strikeToResolve  && pins == 10){
+            calculateStrike(pins);
         }
-        if(currentFrameCounter % 1 == 0 && currentFrameCounter != 0.0) {
-            frames = Arrays.copyOf(frames, (int) currentFrameCounter + 1);
-            frames[(int) currentFrameCounter] = createFrame();
+        if(pins == 10 && currentThrowCounter % 2 != 0){
+            strikeToResolve = true;
+            frames[(int) currentFrameCounter].setPinsRolled(pins, currentThrowCounter);
+            currentThrowCounter += 1;
+            currentFrameCounter += 1.0;
+            return;
+        } else {
+            frames[(int) currentFrameCounter].setPinsRolled(pins, currentThrowCounter);
         }
-        frames[(int) currentFrameCounter].setPinsRolled(pins, currentThrowCounter);
+        if(strikeToResolve){
+            calculateStrike(pins);
+        }
         currentFrameCounter += 0.5;
     }
 
@@ -48,8 +58,14 @@ public class Game implements GameInterface{
         return false;
     }
 
-    private Frame createFrame() {
-        return new Frame();
+    private void createFrame() {
+        if(currentFrameCounter == 0.0) {
+            frames[0] = new Frame();
+        }
+        if(currentFrameCounter % 1 == 0 && currentFrameCounter != 0.0) {
+            frames = Arrays.copyOf(frames, (int) currentFrameCounter + 1);
+            frames[(int) currentFrameCounter] = new Frame();
+        }
     }
 
     @Override
@@ -62,5 +78,17 @@ public class Game implements GameInterface{
             }
         }
         return stringBuilder.toString();
+    }
+
+    private void calculateStrike(int pins){
+        var frameToCheck = frames[(int) currentFrameCounter];
+        if(frameToCheck.getPinsRolled().length == 1 && pins == 10){
+            frames[(int) currentFrameCounter - 1].setScore(10);
+            strikeToResolve = false;
+        }
+        if(frameToCheck.getPinsRolled().length == 2){
+            frames[(int) currentFrameCounter - 1].setScore(frameToCheck.getScore());
+            strikeToResolve = false;
+        }
     }
 }

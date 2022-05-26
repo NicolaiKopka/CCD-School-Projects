@@ -68,4 +68,33 @@ class GameTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    void shouldReturnCorrectScoreAfterResolvingStrike() {
+        var game = new Game();
+        game.addRoll(10);
+        game.addRoll(4);
+        game.addRoll(5);
+        String expected = "([10],19), ([4,5],9)";
+        String actual = game.toString();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void shouldReturnCorrectScoreAfterResolvingMultipleStrikes() {
+        var game = new Game();
+        game.addRoll(2);
+        game.addRoll(7);
+        game.addRoll(10);
+        game.addRoll(10);
+        game.addRoll(10);
+        game.addRoll(4);
+        game.addRoll(5);
+        String expected = "([2,7],9), ([10],20), ([10],20), ([10],19), ([4,5],9)";
+        String actual = game.toString();
+        assertEquals(expected, actual);
+        int expectedScore = 77;
+        int actualScore = game.totalScore();
+        assertEquals(expectedScore, actualScore);
+    }
+
 }
